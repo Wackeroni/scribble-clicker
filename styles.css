@@ -1,0 +1,933 @@
+:root {
+    --primary-color: #5865f2; /* Discord blue */
+    --secondary-color: #7289da; /* Discord lighter blue */
+    --background-color: #36393f; /* Discord dark background */
+    --darker-background: #2f3136; /* Discord sidebar background */
+    --text-color: #dcddde; /* Discord text */
+    --muted-text-color: #8e9297; /* Discord muted text */
+    --button-hover: #4752c4; /* Darker blue for hover */
+    --upgrade-bg: #2f3136; /* Discord sidebar background */
+    --upgrade-border: #202225; /* Discord darker border */
+    --upgrade-available: #43b581; /* Discord green */
+    --upgrade-unavailable: #f04747; /* Discord red */
+    --upgrade-maxed: #faa61a; /* Discord yellow/gold */
+    --job-bg: #2f3136;
+    --minigame-bg: #2f3136;
+    --crafting-bg: #2f3136;
+    --farming-bg: #2f3136;
+    --fishing-bg: #2f3136;
+    --stat-bg: #202225; /* Discord darker background */
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+  
+  .game-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  
+  .scribble-logo {
+    height: 50px;
+    margin-right: 15px;
+  }
+  
+  h1 {
+    color: var(--primary-color);
+    margin-bottom: 5px;
+    font-size: 2.5rem;
+  }
+  
+  .credits {
+    color: var(--muted-text-color);
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+  
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 1.2rem;
+    flex-wrap: wrap;
+  }
+  
+  .stat {
+    background-color: var(--stat-bg);
+    padding: 10px 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+  }
+  
+  .currency-icon {
+    height: 20px;
+    margin-right: 5px;
+  }
+  
+  .stat span {
+    font-weight: bold;
+    color: var(--primary-color);
+    margin: 0 5px;
+  }
+  
+  main {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    flex-grow: 1;
+  }
+  
+  .game-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    min-height: 200px;
+  }
+  
+  .coin-button {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: visible;
+    padding: 0;
+  }
+  
+  .coin-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.2s ease;
+  }
+  
+  .coin-button:hover .coin-image {
+    transform: scale(1.1);
+  }
+  
+  .coin-button:active .coin-image {
+    transform: scale(0.95);
+  }
+  
+  .coin-button.clicked .coin-image {
+    animation: pulse 0.3s ease-out;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .coin-button.tier1 .coin-image {
+    filter: drop-shadow(0 0 5px rgba(123, 104, 238, 0.8));
+  }
+  
+  .coin-button.tier2 .coin-image {
+    filter: drop-shadow(0 0 8px rgba(147, 112, 219, 0.8));
+  }
+  
+  .coin-button.tier3 .coin-image {
+    filter: drop-shadow(0 0 12px rgba(138, 43, 226, 0.8));
+  }
+  
+  .coin-button.tier4 .coin-image {
+    filter: drop-shadow(0 0 16px rgba(148, 0, 211, 0.8));
+  }
+  
+  .coin-button.tier5 .coin-image {
+    filter: drop-shadow(0 0 20px rgba(139, 0, 139, 0.8));
+  }
+  
+  .coin-particle {
+    position: absolute;
+    background-color: gold;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.8;
+    animation: float 1s ease-out forwards;
+    z-index: 10;
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.8;
+    }
+    100% {
+      transform: translate(var(--x), var(--y)) scale(0);
+      opacity: 0;
+    }
+  }
+  
+  h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .upgrades-container,
+  .jobs-container,
+  .minigames-container,
+  .crafting-container,
+  .farming-container,
+  .fishing-container {
+    background-color: var(--upgrade-bg);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    border: 1px solid var(--upgrade-border);
+  }
+  
+  .upgrades-container.visible,
+  .jobs-container.visible,
+  .minigames-container.visible,
+  .crafting-container.visible,
+  .farming-container.visible,
+  .fishing-container.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .upgrades-list,
+  .jobs-list,
+  .minigames-list,
+  .crafting-list,
+  .plants-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+  }
+  
+  .upgrade-item,
+  .job-item,
+  .minigame-item,
+  .craft-item,
+  .plant-item {
+    background-color: var(--darker-background);
+    border: 1px solid var(--upgrade-border);
+    border-radius: 5px;
+    padding: 15px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .upgrade-item:hover,
+  .job-item:hover,
+  .minigame-item:hover,
+  .craft-item:hover,
+  .plant-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+  }
+  
+  .upgrade-item.available,
+  .job-item.available,
+  .minigame-item.available,
+  .craft-item.available {
+    border-color: var(--upgrade-available);
+  }
+  
+  .upgrade-item.unavailable,
+  .job-item.unavailable,
+  .minigame-item.unavailable,
+  .craft-item.unavailable {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  
+  .upgrade-item.maxed,
+  .job-item.maxed {
+    border-color: var(--upgrade-maxed);
+  }
+  
+  .upgrade-name,
+  .job-name,
+  .minigame-name,
+  .craft-name,
+  .plant-name {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #fff;
+  }
+  
+  .upgrade-cost,
+  .job-cost,
+  .minigame-cost,
+  .craft-cost {
+    color: var(--primary-color);
+    font-weight: bold;
+  }
+  
+  .upgrade-description,
+  .job-description,
+  .minigame-description,
+  .craft-description,
+  .plant-description {
+    font-size: 0.9rem;
+    color: var(--muted-text-color);
+  }
+  
+  .upgrade-status,
+  .job-status,
+  .minigame-status,
+  .craft-status {
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-align: right;
+  }
+  
+  .upgrade-item.available .upgrade-status,
+  .job-item.available .job-status,
+  .minigame-item.available .minigame-status,
+  .craft-item.available .craft-status {
+    color: var(--upgrade-available);
+  }
+  
+  .upgrade-item.unavailable .upgrade-status,
+  .job-item.unavailable .job-status,
+  .minigame-item.unavailable .minigame-status,
+  .craft-item.unavailable .craft-status {
+    color: var(--upgrade-unavailable);
+  }
+  
+  .upgrade-item.maxed .upgrade-status,
+  .job-item.maxed .job-status {
+    color: var(--upgrade-maxed);
+  }
+  
+  /* Add styles for the job action buttons and cooldowns */
+  .job-action-button {
+    padding: 8px 15px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 10px;
+  }
+  
+  .job-action-button:hover {
+    background-color: var(--button-hover);
+  }
+  
+  .job-action-button:disabled {
+    background-color: #4f545c;
+    cursor: not-allowed;
+  }
+  
+  .job-cooldown {
+    margin-top: 5px;
+    font-size: 0.9rem;
+    color: var(--muted-text-color);
+  }
+  
+  .farming-area,
+  .fishing-area {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .plant-info,
+  .fishing-info {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+    background-color: var(--darker-background);
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .plant-actions,
+  .fishing-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .plant-actions button,
+  .fishing-actions button {
+    padding: 8px 15px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .plant-actions button:hover,
+  .fishing-actions button:hover {
+    background-color: var(--button-hover);
+  }
+  
+  .plant-actions button:disabled,
+  .fishing-actions button:disabled {
+    background-color: #4f545c;
+    cursor: not-allowed;
+  }
+  
+  .fishing-result,
+  .plant-result {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: var(--darker-background);
+  }
+  
+  footer {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  footer button {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  footer button:hover {
+    background-color: var(--button-hover);
+  }
+  
+  .notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+  }
+  
+  .hidden {
+    display: none !important;
+  }
+  
+  /* Modal Styles */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: var(--darker-background);
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 1px solid var(--upgrade-border);
+    color: var(--text-color);
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--muted-text-color);
+  }
+  
+  .close-button:hover {
+    color: var(--text-color);
+  }
+  
+  /* Gambler Minigame Styles */
+  .gambler-controls {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+  }
+  
+  #bet-amount {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid var(--upgrade-border);
+    border-radius: 5px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+  
+  #gamble-button {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #gamble-button:hover {
+    background-color: var(--button-hover);
+  }
+  
+  .gambler-result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .result-win {
+    background-color: rgba(67, 181, 129, 0.2);
+    color: var(--upgrade-available);
+    border: 1px solid var(--upgrade-available);
+  }
+  
+  .result-lose {
+    background-color: rgba(240, 71, 71, 0.2);
+    color: var(--upgrade-unavailable);
+    border: 1px solid var(--upgrade-unavailable);
+  }
+  
+  .slot-machine {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .slot {
+    width: 60px;
+    height: 60px;
+    background-color: var(--background-color);
+    border: 2px solid var(--upgrade-border);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  /* Styles for the mini slot machine */
+  .gambler-controls {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  
+  #gambler-bet-amount {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid var(--upgrade-border);
+    border-radius: 5px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+  
+  .slot-machine-mini {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    display: none;
+  }
+  
+  .slot-mini {
+    width: 40px;
+    height: 40px;
+    background-color: var(--background-color);
+    border: 2px solid var(--upgrade-border);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .gambler-result-mini {
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    display: none;
+  }
+  
+  .gambler-result-mini.result-win {
+    background-color: rgba(67, 181, 129, 0.2);
+    color: var(--upgrade-available);
+    border: 1px solid var(--upgrade-available);
+  }
+  
+  .gambler-result-mini.result-lose {
+    background-color: rgba(240, 71, 71, 0.2);
+    color: var(--upgrade-unavailable);
+    border: 1px solid var(--upgrade-unavailable);
+  }
+  
+  /* Wordle Minigame Styles */
+  .wordle-grid {
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    gap: 5px;
+    margin-bottom: 20px;
+  }
+  
+  .wordle-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+  }
+  
+  .wordle-cell {
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--upgrade-border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: var(--background-color);
+  }
+  
+  .wordle-cell.correct {
+    background-color: var(--upgrade-available);
+    border-color: var(--upgrade-available);
+    color: white;
+  }
+  
+  .wordle-cell.present {
+    background-color: var(--upgrade-maxed);
+    border-color: var(--upgrade-maxed);
+    color: white;
+  }
+  
+  .wordle-cell.absent {
+    background-color: #4f545c;
+    border-color: #4f545c;
+    color: white;
+  }
+  
+  .wordle-keyboard {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  
+  .keyboard-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+  
+  .key {
+    min-width: 40px;
+    height: 58px;
+    border-radius: 4px;
+    border: none;
+    background-color: #4f545c;
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  
+  .key:hover {
+    background-color: #5d6269;
+  }
+  
+  #enter-key,
+  #backspace-key {
+    min-width: 65px;
+  }
+  
+  .key.correct {
+    background-color: var(--upgrade-available);
+    color: white;
+  }
+  
+  .key.present {
+    background-color: var(--upgrade-maxed);
+    color: white;
+  }
+  
+  .key.absent {
+    background-color: #36393f;
+    color: var(--text-color);
+  }
+  
+  .wordle-result,
+  .professor-result,
+  .merchant-result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .wordle-cooldown,
+  .professor-cooldown,
+  .merchant-cooldown {
+    margin-top: 15px;
+    text-align: center;
+    color: var(--muted-text-color);
+  }
+  
+  /* Professor Minigame Styles */
+  .math-problem {
+    font-size: 1.5rem;
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: var(--background-color);
+    border-radius: 5px;
+  }
+  
+  .professor-controls {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    justify-content: center;
+  }
+  
+  #math-answer {
+    padding: 10px;
+    border: 1px solid var(--upgrade-border);
+    border-radius: 5px;
+    width: 150px;
+    text-align: center;
+    font-size: 1.2rem;
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+  
+  #submit-answer {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #submit-answer:hover {
+    background-color: var(--button-hover);
+  }
+  
+  /* Merchant Minigame Styles */
+  .merchant-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+  }
+  
+  .merchant-item {
+    background-color: var(--background-color);
+    border: 1px solid var(--upgrade-border);
+    border-radius: 5px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .merchant-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    border-color: var(--primary-color);
+  }
+  
+  .merchant-item-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #fff;
+  }
+  
+  .merchant-item-property {
+    font-size: 0.9rem;
+    color: var(--muted-text-color);
+    margin-bottom: 3px;
+  }
+  
+  /* Make job and minigame items more visually distinct */
+  .job-item, .minigame-item {
+    background-color: var(--darker-background);
+    border: 1px solid var(--upgrade-border);
+    border-radius: 5px;
+    padding: 15px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeIn 0.5s ease-out;
+    margin-bottom: 15px;
+  }
+  
+  .job-item.unlocked, .minigame-item.unlocked {
+    border-color: var(--primary-color);
+    background-color: rgba(88, 101, 242, 0.1);
+  }
+  
+  /* Improve the layout of the jobs and minigames containers */
+  .jobs-container, .minigames-container {
+    margin-bottom: 30px;
+  }
+  
+  .jobs-list, .minigames-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+  }
+  
+  /* Make sure the play button is visible */
+  .play-minigame-button {
+    padding: 8px 15px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    align-self: center;
+  }
+  
+  .play-minigame-button:hover {
+    background-color: var(--button-hover);
+  }
+  
+  .play-minigame-button:disabled {
+    background-color: #4f545c;
+    cursor: not-allowed;
+  }
+  
+  .minigame-cooldown {
+    margin-top: 5px;
+    font-size: 0.9rem;
+    color: var(--muted-text-color);
+    text-align: center;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .stats {
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+  
+    .upgrades-list,
+    .jobs-list,
+    .minigames-list,
+    .crafting-list,
+    .plants-list {
+      grid-template-columns: 1fr;
+    }
+  
+    .coin-button {
+      width: 120px;
+      height: 120px;
+    }
+  
+    .wordle-cell {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+  
+    .key {
+      min-width: 30px;
+      height: 45px;
+      font-size: 0.8rem;
+    }
+  
+    #enter-key,
+    #backspace-key {
+      min-width: 50px;
+    }
+  
+    .modal-content {
+      padding: 20px;
+    }
+  }
+  

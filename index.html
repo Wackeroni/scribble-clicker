@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scribble Clicker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+</head>
+<body>
+    <div class="game-container">
+        <header>
+    <div class="title-container">
+        <img src="scribble.png" alt="Scribble" class="scribble-logo">
+        <h1>Scribble Clicker</h1>
+    </div>
+    <div class="credits">
+        <p>Made by Wackeroni</p>
+        <p>Scribble bot itself made by Home9634</p>
+    </div>
+    <div class="stats">
+        <div class="stat">
+            <img src="ucoin.png" alt="UCoins" class="currency-icon"> <span id="coins">0</span> UCoins
+        </div>
+        <div class="stat" id="crystals-container" class="hidden">
+            <img src="crystal.png" alt="Crystals" class="currency-icon"> <span id="crystals">0</span> Crystals
+        </div>
+        <div class="stat" id="cores-container" class="hidden">
+            <img src="core.png" alt="Cores" class="currency-icon"> <span id="cores">0</span> Cores
+        </div>
+        <div class="stat" id="cps-container">
+            <span id="cps">0</span> UCoins/sec
+        </div>
+        <div class="stat" id="cpc-container">
+            <span id="cpc">1</span> UCoins/click
+        </div>
+    </div>
+</header>
+
+        <main>
+            <div class="game-area">
+    <button id="main-button" class="coin-button">
+        <img src="ucoin.png" alt="UCoins" class="coin-image">
+    </button>
+</div>
+
+            <div id="upgrades-container" class="upgrades-container hidden">
+                <h2>Upgrades</h2>
+                <div id="upgrades-list" class="upgrades-list">
+                    <!-- Upgrades will be added here dynamically -->
+                </div>
+            </div>
+
+            <div id="jobs-container" class="jobs-container hidden">
+                <h2>Jobs</h2>
+                <div id="jobs-list" class="jobs-list">
+                    <!-- Jobs will be added here dynamically -->
+                </div>
+            </div>
+
+            <div id="minigames-container" class="minigames-container hidden">
+                <h2>Minigames</h2>
+                <div id="minigames-list" class="minigames-list">
+                    <!-- Minigames will be added here dynamically -->
+                </div>
+            </div>
+
+            <div id="crafting-container" class="crafting-container hidden">
+                <h2>Crafting</h2>
+                <div id="crafting-list" class="crafting-list">
+                    <!-- Craftable items will be added here dynamically -->
+                </div>
+            </div>
+
+            <div id="farming-container" class="farming-container hidden">
+                <h2>Farming</h2>
+                <div id="farming-area" class="farming-area">
+                    <div id="plant-selection" class="plant-selection hidden">
+                        <h3>Select a Plant</h3>
+                        <div id="plants-list" class="plants-list">
+                            <!-- Plants will be added here dynamically -->
+                        </div>
+                    </div>
+                    <div id="current-plant" class="current-plant hidden">
+                        <h3>Current Plant: <span id="plant-name"></span></h3>
+                        <div class="plant-info">
+                            <div>Cycles: <span id="plant-cycles">0</span>/<span id="plant-max-cycles">0</span></div>
+                            <div>Next Water: <span id="plant-next-water">0:00</span></div>
+                        </div>
+                        <div class="plant-actions">
+                            <button id="water-plant-btn">Water Plant</button>
+                            <button id="harvest-plant-btn">Harvest Plant</button>
+                            <button id="freeze-plant-btn">Freeze Plant</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="fishing-container" class="fishing-container hidden">
+                <h2>Fishing</h2>
+                <div id="fishing-area" class="fishing-area">
+                    <div class="fishing-info">
+                        <div>Bait: <span id="bait-count">0</span></div>
+                        <div>Fish Caught: <span id="fish-caught">0</span></div>
+                    </div>
+                    <div class="fishing-actions">
+                        <button id="fish-btn" disabled>Fish (Need Bait)</button>
+                    </div>
+                    <div id="fishing-result" class="fishing-result hidden"></div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <button id="save-button">Save Game</button>
+            <button id="reset-button">Reset Game</button>
+        </footer>
+    </div>
+
+    <div id="notification" class="notification hidden"></div>
+    
+    <!-- Gambler Minigame Modal -->
+    <div id="gambler-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Gambler</h2>
+            <p>Bet your UCoins for a chance to win more!</p>
+            <div class="gambler-controls">
+                <input type="number" id="bet-amount" min="10" placeholder="Bet amount">
+                <button id="gamble-button">Gamble!</button>
+            </div>
+            <div id="gambler-result" class="gambler-result hidden"></div>
+            <div class="slot-machine hidden" id="slot-machine">
+                <div class="slot" id="slot1">?</div>
+                <div class="slot" id="slot2">?</div>
+                <div class="slot" id="slot3">?</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wordle Minigame Modal -->
+    <div id="wordle-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Wordle</h2>
+            <p>Guess the 5-letter word in 6 tries!</p>
+            <div class="wordle-game">
+                <div id="wordle-grid" class="wordle-grid">
+                    <!-- Wordle grid will be generated here -->
+                </div>
+                <div class="wordle-keyboard">
+                    <div class="keyboard-row">
+                        <button class="key" data-key="q">q</button>
+                        <button class="key" data-key="w">w</button>
+                        <button class="key" data-key="e">e</button>
+                        <button class="key" data-key="r">r</button>
+                        <button class="key" data-key="t">t</button>
+                        <button class="key" data-key="y">y</button>
+                        <button class="key" data-key="u">u</button>
+                        <button class="key" data-key="i">i</button>
+                        <button class="key" data-key="o">o</button>
+                        <button class="key" data-key="p">p</button>
+                    </div>
+                    <div class="keyboard-row">
+                        <button class="key" data-key="a">a</button>
+                        <button class="key" data-key="s">s</button>
+                        <button class="key" data-key="d">d</button>
+                        <button class="key" data-key="f">f</button>
+                        <button class="key" data-key="g">g</button>
+                        <button class="key" data-key="h">h</button>
+                        <button class="key" data-key="j">j</button>
+                        <button class="key" data-key="k">k</button>
+                        <button class="key" data-key="l">l</button>
+                    </div>
+                    <div class="keyboard-row">
+                        <button class="key" data-key="enter" id="enter-key">enter</button>
+                        <button class="key" data-key="z">z</button>
+                        <button class="key" data-key="x">x</button>
+                        <button class="key" data-key="c">c</button>
+                        <button class="key" data-key="v">v</button>
+                        <button class="key" data-key="b">b</button>
+                        <button class="key" data-key="n">n</button>
+                        <button class="key" data-key="m">m</button>
+                        <button class="key" data-key="backspace" id="backspace-key">⌫</button>
+                    </div>
+                </div>
+                <div id="wordle-result" class="wordle-result hidden"></div>
+                <div id="wordle-cooldown" class="wordle-cooldown hidden">
+                    Next game available in: <span id="wordle-timer">5:00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Professor Minigame Modal -->
+    <div id="professor-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Professor</h2>
+            <p>Solve math problems to earn UCoins!</p>
+            <div class="professor-game">
+                <div id="math-problem" class="math-problem"></div>
+                <div class="professor-controls">
+                    <input type="number" id="math-answer" placeholder="Your answer">
+                    <button id="submit-answer">Submit</button>
+                </div>
+                <div id="professor-result" class="professor-result hidden"></div>
+                <div id="professor-cooldown" class="professor-cooldown hidden">
+                    Next problem available in: <span id="professor-timer">0:35</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Merchant Minigame Modal -->
+    <div id="merchant-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Merchant</h2>
+            <p>Choose an item to sell for UCoins!</p>
+            <div class="merchant-game">
+                <div id="merchant-items" class="merchant-items">
+                    <!-- Items will be generated here -->
+                </div>
+                <div id="merchant-result" class="merchant-result hidden"></div>
+                <div id="merchant-cooldown" class="merchant-cooldown hidden">
+                    Next items available in: <span id="merchant-timer">2:00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
